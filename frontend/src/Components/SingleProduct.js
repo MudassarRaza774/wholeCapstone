@@ -17,7 +17,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Cookie from 'js-cookie'
-import EditDialog from './EditDialog';
+import EditDialog from './EditItemDialog';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -35,10 +35,11 @@ function SingleProduct({ productData }) {
         sessionStorage.setItem("currentProduct", JSON.stringify(productData))
     }
 
-    const rawUser = sessionStorage.getItem("loggedInUser")
-    const user = JSON.parse(rawUser)
-    const rawData = sessionStorage.getItem("currentProduct")
-    const data = JSON.parse(rawData)
+
+    const user = JSON.parse(sessionStorage.getItem("loggedInUser"))
+    const { userName } = user
+    const data = JSON.parse(sessionStorage.getItem("currentProduct"))
+
     const { name, price, stuff, color, images, size, guidelines } = data
 
     const handleClickOpen = () => {
@@ -54,7 +55,7 @@ function SingleProduct({ productData }) {
     }
 
     const dataToSend = {
-        "userName": user,
+        "userName": userName,
         "productName": name,
         "productPrice": price,
         "productImage": images,

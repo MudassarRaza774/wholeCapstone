@@ -17,7 +17,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Sorting from './Sorting';
+import Sorting from './SortDialog';
 
 function Home({ setProductData }) {
     const navigate = useNavigate()
@@ -50,6 +50,7 @@ function Home({ setProductData }) {
                 credentials: "include"
             })
             if (result.status !== 200) {
+                sessionStorage.setItem("loggedInUser", '')
                 navigate('/login')
             } else {
                 const data = await result.json()
@@ -59,7 +60,7 @@ function Home({ setProductData }) {
         } else {
             const result = await fetch(`clothes//allVariety/filter/${filterValues}`)
             if (result.status !== 200) {
-                console.log("hello")
+                alert('No value matched with this filter')
             } else {
                 const filteredResult = await result.json()
                 console.log("filteredResult", filteredResult)

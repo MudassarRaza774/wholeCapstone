@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useFormik } from 'formik';
-import { UpdateItem } from '../schema/UpdateItem';
+import { UpdateItem } from '../validationSchema/UpdateItem';
 import { FormHelperText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 

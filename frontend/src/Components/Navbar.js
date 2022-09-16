@@ -17,13 +17,14 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-const pages = ['Home', 'Login', 'Signup', "Contact Us", "About US"];
-const settings = ['Profile', 'Logout'];
 
+const settings = ['Profile', 'Logout'];
 function Navbar({ cartCount }) {
+
     const naviagte = useNavigate()
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -36,24 +37,25 @@ function Navbar({ cartCount }) {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = async(event) => {
-        const value =  event.currentTarget.id
-        if(value === 'Logout'){
+    const handleCloseUserMenu = async (event) => {
+        const value = event.currentTarget.id
+        if (value === 'Logout') {
             const result = await fetch('user/logout')
-            console.log("result statusis", result.status)
-            if(result.status !== 200){
+            if (result.status !== 200) {
                 setAnchorElUser(null);
-            }else{
+            } else {
+                sessionStorage.setItem('loggedInUser', '')
+                sessionStorage.setItem('currentProduct', '')
                 setAnchorElUser(null)
                 naviagte("/login")
             }
-        }else if(value === 'Profile'){
+        } else if (value === 'Profile') {
             naviagte('/userprofile')
 
-        }else{
+        } else {
             setAnchorElUser(null)
         }
-        
+
     };
 
     return (
@@ -109,11 +111,16 @@ function Navbar({ cartCount }) {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
-                            ))}
+                            <Link to='/' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>Home</Button></Link>
+                            {
+                                sessionStorage.getItem('loggedInUser') ? null :
+                                    <Link to='/login' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>Login</Button></Link>
+                            }
+                            {
+                                sessionStorage.getItem('loggedInUser') ? null : <Link to='/signup' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>Signup</Button></Link>
+                            }
+                            <Link to='/contactus' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>contact Us</Button></Link>
+                            <Link to='/aboutus' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>About Us</Button></Link>
                         </Menu>
                     </Box>
                     <BlurOffIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -137,48 +144,59 @@ function Navbar({ cartCount }) {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Link to='/' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>Home</Button></Link>
-                        <Link to='/login' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>Login</Button></Link>
-                        <Link to='/signup' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>Signup</Button></Link>
+                        {
+                            sessionStorage.getItem('loggedInUser') ? null :
+                                <Link to='/login' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>Login</Button></Link>
+                        }
+                        {
+                            sessionStorage.getItem('loggedInUser') ? null : <Link to='/signup' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>Signup</Button></Link>
+                        }
                         <Link to='/contactus' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>contact Us</Button></Link>
                         <Link to='/aboutus' style={{ textDecoration: "none" }} ><Button sx={{ my: 2, color: 'black', display: 'block' }}>About Us</Button></Link>
                     </Box>
-                    <Box>
-                        <Link to='/cart'>
-                            <Badge badgeContent={cartCount} color="primary" sx={{ mr: 1 }}>
-                                <ShoppingCartIcon color="action" />
-                            </Badge>
-                        </Link>
-                    </Box>
+                    {
+                        sessionStorage.getItem('loggedInUser') ? <Box>
+                            <Link to='/cart'>
+                                <Badge badgeContent={cartCount} color="primary" sx={{ mr: 1 }}>
+                                    <ShoppingCartIcon color="action" />
+                                </Badge>
+                            </Link>
+                        </Box> : null
+                    }
+
                     <span>&nbsp;</span>
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar ><PersonIcon /></Avatar>
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} id={setting} data-my-value={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
+                    {
+                        sessionStorage.getItem('loggedInUser') ?
+                            <Box sx={{ flexGrow: 0 }}>
+                                <Tooltip title="Open settings">
+                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                        <Avatar ><PersonIcon /></Avatar>
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                >
+                                    {settings.map((setting) => (
+                                        <MenuItem key={setting} id={setting} data-my-value={setting} onClick={handleCloseUserMenu}>
+                                            <Typography textAlign="center">{setting}</Typography>
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
+                            </Box> : null
+                    }
                 </Toolbar>
             </Container>
         </AppBar >

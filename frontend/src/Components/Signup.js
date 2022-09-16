@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
-import { schema } from '../schema/signUp';
+import { schema } from '../validationSchema/signUp';
 
 
 const initalData = { firstName: "", lastName: "", userName: "", email: "", password: "", address: "", phoneNo: "" }

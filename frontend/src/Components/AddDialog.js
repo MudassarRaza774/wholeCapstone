@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useFormik } from 'formik';
-import { AddNewItem } from '../schema/AddNewItem';
+import { AddNewItem } from '../validationSchema/AddNewItem';
 import { FormHelperText } from '@mui/material';
 
 const initialData = {

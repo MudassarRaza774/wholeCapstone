@@ -13,14 +13,14 @@ const login = async (req, res) => {
     }
     const result = await Users.findOne({ email: email })
     if (result) {
-        const token = await result.generateAuthToken()
-        res.cookie("token", token, {
-            expires: new Date(Date.now() + 600000)
-        })
         const isMatch = await bcrypt.compare(password, result.password)
         if (!isMatch) {
             return res.status(404).json("Username or Password is wrong")
         } else {
+            const token = await result.generateAuthToken()
+            res.cookie("token", token, {
+                expires: new Date(Date.now() + 600000)
+            })
             res.status(200).json(result)
         }
     } else {
