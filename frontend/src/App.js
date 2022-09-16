@@ -9,13 +9,15 @@ import AboutUs from "./Components/AboutUs";
 import Cart from "./Components/Cart";
 import SingleProduct from "./Components/SingleProduct";
 import { useState } from "react";
+import UserProfile from "./Components/UserProfile";
 
 
 function App() {
 
   const [productData, setProductData] = useState('')
   const [loggedInUser, setLoggedInUser] = useState('')
-  const [cartCount, setCartCount] = useState(0)
+  const [cartCount, setCartCount] = useState(0)``
+  console.log("logged in user from app is ", loggedInUser)
   if (loggedInUser) {
     sessionStorage.setItem("loggedInUser", JSON.stringify(loggedInUser.userName)) //storing the name in session so i can reteive the name for cart usage
   }
@@ -29,6 +31,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/userprofile" element={<UserProfile loggedInUser={loggedInUser}/>} />
           <Route path="/singleproduct" element={<SingleProduct productData={productData} />} />
           <Route path='/cart' element={<Cart setCartCount={setCartCount} /> /*show items that belong to the current user*/} />
         </Routes>

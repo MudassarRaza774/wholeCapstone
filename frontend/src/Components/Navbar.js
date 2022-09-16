@@ -16,10 +16,12 @@ import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const pages = ['Home', 'Login', 'Signup', "Contact Us", "About US"];
 const settings = ['Profile', 'Logout'];
 
 function Navbar({ cartCount }) {
+    const naviagte = useNavigate()
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -34,9 +36,24 @@ function Navbar({ cartCount }) {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = (event) => {
-        console.log(event.target)
-        setAnchorElUser(null);
+    const handleCloseUserMenu = async(event) => {
+        const value =  event.currentTarget.id
+        if(value === 'Logout'){
+            const result = await fetch('user/logout')
+            console.log("result statusis", result.status)
+            if(result.status !== 200){
+                setAnchorElUser(null);
+            }else{
+                setAnchorElUser(null)
+                naviagte("/login")
+            }
+        }else if(value === 'Profile'){
+            naviagte('/userprofile')
+
+        }else{
+            setAnchorElUser(null)
+        }
+        
     };
 
     return (
@@ -156,7 +173,7 @@ function Navbar({ cartCount }) {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} id={setting} onClick={handleCloseUserMenu}>
+                                <MenuItem key={setting} id={setting} data-my-value={setting} onClick={handleCloseUserMenu}>
                                     <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}

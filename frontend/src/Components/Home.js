@@ -31,7 +31,6 @@ function Home({ setProductData }) {
     const [filterValues, setFilterValues] = useState([]) //can get the data on which filter would apply
     const doFilter = filterValues.length
 
-    console.log("filter is", doFilter)
     const handleSort = (event) => {
         setSort(event.target.value);
     };
